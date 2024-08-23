@@ -375,7 +375,7 @@ if ($flavor -eq "DataOps") {
 
     # Joining ClientVM to AD DS domain
     if ($null -eq $addsDomainName){
-        $addsDomainName = "jumpstart.local"
+        $addsDomainName = "sgmtgdev.com"
     }
 
     $netbiosname = $addsDomainName.Split(".")[0]
