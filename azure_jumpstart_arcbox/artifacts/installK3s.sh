@@ -12,7 +12,7 @@ echo $subscriptionId:$2 | awk '{print substr($1,2); }' >> vars.sh
 echo $vmName:$3 | awk '{print substr($1,2); }' >> vars.sh
 echo $location:$4 | awk '{print substr($1,2); }' >> vars.sh
 echo $stagingStorageAccountName:$5 | awk '{print substr($1,2); }' >> vars.sh
-echo $logAnalyticsWorkspace:$6 | awk '{print substr($1,2); }' >> vars.sh
+echo $logAnalyticsWorkspaceResourceId:$6 | awk '{print substr($1,2); }' >> vars.sh
 echo $templateBaseUrl:$7 | awk '{print substr($1,2); }' >> vars.sh
 echo $storageContainerName:$8 | awk '{print substr($1,2); }' >> vars.sh
 echo $k3sControlPlane:$9 | awk '{print substr($1,2); }' >> vars.sh
@@ -22,7 +22,7 @@ sed -i '3s/^/export subscriptionId=/' vars.sh
 sed -i '4s/^/export vmName=/' vars.sh
 sed -i '5s/^/export location=/' vars.sh
 sed -i '6s/^/export stagingStorageAccountName=/' vars.sh
-sed -i '7s/^/export logAnalyticsWorkspace=/' vars.sh
+sed -i '7s/^/export logAnalyticsWorkspaceResourceId=/' vars.sh
 sed -i '8s/^/export templateBaseUrl=/' vars.sh
 sed -i '9s/^/export storageContainerName=/' vars.sh
 sed -i '10s/^/export k3sControlPlane=/' vars.sh
@@ -161,7 +161,7 @@ if [[ "$k3sControlPlane" == "true" ]]; then
     echo "Onboarding the cluster to Azure Arc"
     echo ""
     resourceGroup=$(sudo -u $adminUsername az resource list --query "[?name=='$stagingStorageAccountName']".[resourceGroup] --resource-type "Microsoft.Storage/storageAccounts" -o tsv)
-    workspaceResourceId=$(sudo -u $adminUsername az resource show --resource-group $resourceGroup --name $logAnalyticsWorkspace --resource-type "Microsoft.OperationalInsights/workspaces" --query id -o tsv)
+    workspaceResourceId=$logAnalyticsWorkspaceResourceId
     echo "Log Analytics workspace id $workspaceResourceId"
 
     sudo -u $adminUsername az connectedk8s connect --name $vmName --resource-group $resourceGroup --location $location

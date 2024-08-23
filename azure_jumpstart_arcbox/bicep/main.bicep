@@ -23,6 +23,9 @@ param rdpPort string = '3389'
 @description('Name for your log analytics workspace')
 param logAnalyticsWorkspaceName string
 
+@description('ResourceId for your log analytics workspace')
+param logAnalyticsWorkspaceResourceId string
+
 @description('The flavor of ArcBox you want to deploy. Valid values are: \'Full\', \'ITPro\', \'DevOps\', \'DataOps\'')
 @allowed([
   'ITPro'
@@ -93,6 +96,7 @@ module ubuntuRancherK3sDataSvcDeployment 'kubernetes/ubuntuRancher.bicep' = if (
     sshRSAPublicKey: sshRSAPublicKey
     stagingStorageAccountName: toLower(stagingStorageAccountDeployment.outputs.storageAccountName)
     logAnalyticsWorkspace: logAnalyticsWorkspaceName
+    logAnalyticsWorkspaceResourceId: logAnalyticsWorkspaceResourceId
     templateBaseUrl: templateBaseUrl
     subnetId: mgmtArtifactsAndPolicyDeployment.outputs.subnetId
     azureLocation: location
@@ -109,6 +113,7 @@ module ubuntuRancherK3sDataSvcNodesDeployment 'kubernetes/ubuntuRancherNodes.bic
     sshRSAPublicKey: sshRSAPublicKey
     stagingStorageAccountName: toLower(stagingStorageAccountDeployment.outputs.storageAccountName)
     logAnalyticsWorkspace: logAnalyticsWorkspaceName
+    logAnalyticsWorkspaceResourceId: logAnalyticsWorkspaceResourceId
     templateBaseUrl: templateBaseUrl
     subnetId: mgmtArtifactsAndPolicyDeployment.outputs.subnetId
     azureLocation: location
@@ -128,6 +133,7 @@ module ubuntuRancherK3sDeployment 'kubernetes/ubuntuRancher.bicep' = if (flavor 
     sshRSAPublicKey: sshRSAPublicKey
     stagingStorageAccountName: toLower(stagingStorageAccountDeployment.outputs.storageAccountName)
     logAnalyticsWorkspace: logAnalyticsWorkspaceName
+    logAnalyticsWorkspaceResourceId: logAnalyticsWorkspaceResourceId
     templateBaseUrl: templateBaseUrl
     subnetId: mgmtArtifactsAndPolicyDeployment.outputs.subnetId
     azureLocation: location
@@ -144,6 +150,7 @@ module ubuntuRancherK3sNodesDeployment 'kubernetes/ubuntuRancherNodes.bicep' = [
     sshRSAPublicKey: sshRSAPublicKey
     stagingStorageAccountName: toLower(stagingStorageAccountDeployment.outputs.storageAccountName)
     logAnalyticsWorkspace: logAnalyticsWorkspaceName
+    logAnalyticsWorkspaceResourceId: logAnalyticsWorkspaceResourceId
     templateBaseUrl: templateBaseUrl
     subnetId: mgmtArtifactsAndPolicyDeployment.outputs.subnetId
     azureLocation: location
@@ -165,6 +172,7 @@ module clientVmDeployment 'clientVm/clientVm.bicep' = {
     azdataPassword: windowsAdminPassword
     tenantId: tenantId
     workspaceName: logAnalyticsWorkspaceName
+    logAnalyticsWorkspaceResourceId: logAnalyticsWorkspaceResourceId
     stagingStorageAccountName: toLower(stagingStorageAccountDeployment.outputs.storageAccountName)
     templateBaseUrl: templateBaseUrl
     flavor: flavor

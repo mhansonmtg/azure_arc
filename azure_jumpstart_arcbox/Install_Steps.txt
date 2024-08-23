@@ -1,0 +1,4 @@
+C:\Users\MichaelHanson\Documents\repos\mhansonmtg\azure_arc\azure_jumpstart_arcbox\bicep\
+
+az deployment group create -g "arcBox-prd-rg-eu-1" -f "main.bicep" -p "main.bicepparam"
+

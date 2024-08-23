@@ -26,6 +26,9 @@ param stagingStorageAccountName string
 @description('Name of the Log Analytics workspace used with cluster extensions')
 param logAnalyticsWorkspace string
 
+@description('ResourceId for your log analytics workspace')
+param logAnalyticsWorkspaceResourceId string
+
 @description('The base URL used for accessing artifacts and automation artifacts')
 param templateBaseUrl string
 
@@ -152,7 +155,7 @@ resource vmInstallscriptK3s 'Microsoft.Compute/virtualMachines/extensions@2022-0
     autoUpgradeMinorVersion: true
     settings: {}
     protectedSettings: {
-      commandToExecute: 'bash installK3s.sh ${adminUsername} ${subscription().subscriptionId} ${vmName} ${azureLocation} ${stagingStorageAccountName} ${logAnalyticsWorkspace} ${templateBaseUrl} ${storageContainerName}'
+      commandToExecute: 'bash installK3s.sh ${adminUsername} ${subscription().subscriptionId} ${vmName} ${azureLocation} ${stagingStorageAccountName} ${logAnalyticsWorkspaceResourceId} ${templateBaseUrl} ${storageContainerName}'
       fileUris: [
         '${templateBaseUrl}artifacts/installK3s.sh'
       ]
