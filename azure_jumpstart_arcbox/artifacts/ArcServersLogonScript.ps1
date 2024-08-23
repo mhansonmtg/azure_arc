@@ -100,7 +100,7 @@ if ($Env:flavor -ne "DevOps") {
 
     # Set custom DNS if flaver is DataOps
     if ($Env:flavor -eq 'DataOps') {
-        Add-DhcpServerInDC -DnsName "$namingPrefix-client.jumpstart.local"
+        Add-DhcpServerInDC -DnsName "$namingPrefix-client.sgmtgdev.com"
         Restart-Service dhcpserver
     }
 
