@@ -30,8 +30,8 @@ param flavor string
 @description('Azure Region to deploy the Log Analytics Workspace')
 param location string = resourceGroup().location
 
-@description('SKU, leave default pergb2018')
-param sku string = 'pergb2018'
+//@description('SKU, leave default pergb2018')
+//param sku string = 'pergb2018'
 
 @description('Choice to deploy Bastion to connect to the client VM')
 param deployBastion bool = false
@@ -51,7 +51,7 @@ param networkSecurityGroupName string = '${namingPrefix}-NSG'
 param bastionNetworkSecurityGroupName string = '${namingPrefix}-Bastion-NSG'
 
 @description('DNS Server configuration')
-param dnsServers array = []
+param dnsServers array = ['10.0.0.68']
 
 @description('Tags to assign for all ArcBox resources')
 param resourceTags object = {
@@ -69,16 +69,16 @@ var security = {
   galleryName: 'Security'
 }
 
-var subnetAddressPrefix = '10.16.1.0/24'
-var addressPrefix = '10.16.0.0/16'
-var aksSubnetPrefix = '10.16.76.0/22'
-var dcSubnetPrefix = '10.16.2.0/24'
-var drAddressPrefix = '172.16.0.0/16'
-var drSubnetPrefix = '172.16.128.0/17'
+var subnetAddressPrefix = '10.56.1.0/24'
+var addressPrefix = '10.56.0.0/16'
+var aksSubnetPrefix = '10.56.76.0/22'
+var dcSubnetPrefix = '10.56.2.0/24'
+var drAddressPrefix = '10.57.0.0/16'
+var drSubnetPrefix = '10.57.76.0/22'
 var bastionSubnetName = 'AzureBastionSubnet'
 var bastionSubnetRef = '${arcVirtualNetwork.id}/subnets/${bastionSubnetName}'
 var bastionName = '${namingPrefix}-Bastion'
-var bastionSubnetIpPrefix = '10.16.3.64/26'
+var bastionSubnetIpPrefix = '10.56.3.64/26'
 var bastionPublicIpAddressName = '${bastionName}-PIP'
 var primarySubnet = [
   {
@@ -177,7 +177,7 @@ resource drVirtualNetwork 'Microsoft.Network/virtualNetworks@2022-01-01' = if (f
   }
 }
 
-resource virtualNetworkName_peering_to_DR_vnet 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2022-01-01' = if (flavor == 'DataOps') {
+/* resource virtualNetworkName_peering_to_DR_vnet 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2022-01-01' = if (flavor == 'DataOps') {
   parent: arcVirtualNetwork
   name: 'peering-to-DR-vnet'
   dependsOn: [
@@ -209,7 +209,7 @@ resource drVirtualNetworkName_peering_to_primary_vnet 'Microsoft.Network/virtual
       id: arcVirtualNetwork.id
     }
   }
-}
+} */
 
 resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-01-01' = {
   name: networkSecurityGroupName
@@ -456,7 +456,7 @@ resource bastionNetworkSecurityGroup 'Microsoft.Network/networkSecurityGroups@20
 }
 
 
-resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
+/* resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
   name: workspaceName
   location: location
   tags: resourceTags
@@ -465,9 +465,9 @@ resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
       name: sku
     }
   }
-}
+} */
 
-resource securityGallery 'Microsoft.OperationsManagement/solutions@2015-11-01-preview' = {
+/* resource securityGallery 'Microsoft.OperationsManagement/solutions@2015-11-01-preview' = {
   name: security.name
   location: location
   properties: {
@@ -479,7 +479,7 @@ resource securityGallery 'Microsoft.OperationsManagement/solutions@2015-11-01-pr
     product: 'OMSGallery/${security.galleryName}'
     publisher: 'Microsoft'
   }
-}
+} */
 
 resource publicIpAddress 'Microsoft.Network/publicIPAddresses@2022-01-01' = if (deployBastion == true) {
   name: bastionPublicIpAddressName
@@ -530,7 +530,7 @@ module policyDeployment './policyAzureArc.bicep' = {
   name: 'policyDeployment'
   params: {
     azureLocation: location
-    logAnalyticsWorkspaceId: workspace.id
+    logAnalyticsWorkspaceId: '/subscriptions/b3f5e237-cf19-4f3e-9850-5d2d4d5bff1f/resourcegroups/logging-rg-prd-eu-01/providers/microsoft.operationalinsights/workspaces/coresentinel-log-prd-eu-01'
     flavor: flavor
     resourceTags: resourceTags
   }
