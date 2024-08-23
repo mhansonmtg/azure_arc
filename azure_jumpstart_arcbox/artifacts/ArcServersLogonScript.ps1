@@ -93,7 +93,7 @@ if ($Env:flavor -ne "DevOps") {
     if ($dhcpOptions.Count -lt 3) {
         Set-DhcpServerv4OptionValue -ComputerName localhost `
             -DnsDomain $dnsClient.ConnectionSpecificSuffix `
-            -DnsServer 168.63.129.16, 10.16.2.100 `
+            -DnsServer 10.0.0.68 `
             -Router 10.10.1.1 `
             -Force
     }
@@ -151,10 +151,10 @@ if ($Env:flavor -ne "DevOps") {
 
     # Enable defender for cloud for SQL Server
     # Get workspace information
-    $workspaceResourceID = (az monitor log-analytics workspace show --resource-group $resourceGroup --workspace-name $Env:workspaceName --query "id" -o tsv)
+    $workspaceResourceID = '/subscriptions/b3f5e237-cf19-4f3e-9850-5d2d4d5bff1f/resourcegroups/logging-rg-prd-eu-01/providers/microsoft.operationalinsights/workspaces/coresentinel-log-prd-eu-01'
 
     # Before deploying ArcBox SQL set resource group tag ArcSQLServerExtensionDeployment=Disabled to opt out of automatic SQL onboarding
-    az tag create --resource-id "/subscriptions/$subscriptionId/resourceGroups/$resourceGroup" --tags ArcSQLServerExtensionDeployment=Disabled
+    #az tag create --resource-id "/subscriptions/$subscriptionId/resourceGroups/$resourceGroup" --tags ArcSQLServerExtensionDeployment=Disabled
 
     $SQLvmName = "$namingPrefix-SQL"
     $SQLvmvhdPath = "$Env:ArcBoxVMDir\$namingPrefix-SQL.vhdx"
@@ -296,8 +296,11 @@ if ($Env:flavor -ne "DevOps") {
     # Enable Best practices assessment
     if ($amaExtension.StatusCode -eq 0) {
 
+        az account set -s b3f5e237-cf19-4f3e-9850-5d2d4d5bff1f
         # Create custom log analytics table for SQL assessment
         az monitor log-analytics workspace table create --resource-group $resourceGroup --workspace-name $Env:workspaceName -n SqlAssessment_CL --columns RawData=string TimeGenerated=datetime --only-show-errors
+
+        az account set -s $subscriptionId
 
         # Verify if ArcBox SQL resource is created
         Write-Host "Enabling SQL server best practices assessment"
@@ -313,7 +316,7 @@ if ($Env:flavor -ne "DevOps") {
         $armRestApiEndpoint = "https://management.azure.com/subscriptions/$subscriptionId/resourcegroups/$resourceGroup/providers/Microsoft.HybridCompute/machines/$SQLvmName/extensions/WindowsAgent.SqlServer?api-version=2019-08-02-preview"
 
         # Build API request payload
-        $worspaceResourceId = "/subscriptions/$subscriptionId/resourcegroups/$resourceGroup/providers/microsoft.operationalinsights/workspaces/$Env:workspaceName".ToLower()
+        $worspaceResourceId = "/subscriptions/b3f5e237-cf19-4f3e-9850-5d2d4d5bff1f/resourcegroups/logging-rg-prd-eu-01/providers/microsoft.operationalinsights/workspaces/coresentinel-log-prd-eu-01".ToLower()
         $sqlExtensionId = "/subscriptions/$subscriptionId/resourceGroups/$resourceGroup/providers/Microsoft.HybridCompute/machines/$SQLvmName/extensions/WindowsAgent.SqlServer"
         $sqlbpaPayloadTemplate = "$Env:templateBaseUrl/artifacts/sqlbpa.payload.json"
         $settingsSaveTime = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
@@ -346,11 +349,15 @@ $payLoad = @"
         Write-Host "SQL Server Migration Assessment faild. Please refer troubleshooting guide to run manually."
     }
 
+    az account set -s b3f5e237-cf19-4f3e-9850-5d2d4d5bff1f
+
     #Install SQLAdvancedThreatProtection solution
     az monitor log-analytics solution create --resource-group $resourceGroup --solution-type SQLAdvancedThreatProtection --workspace $Env:workspaceName --only-show-errors
 
     #Install SQLVulnerabilityAssessment solution
     az monitor log-analytics solution create --resource-group $resourceGroup --solution-type SQLVulnerabilityAssessment --workspace $Env:workspaceName --only-show-errors
+
+    az account set -s $subscriptionId
 
     # Update Azure Monitor data collection rule template with Log Analytics workspace resource ID
     $sqlDefenderDcrFile = "$Env:ArcBoxDir\defendersqldcrtemplate.json"

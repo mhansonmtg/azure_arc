@@ -375,16 +375,16 @@ kubectx $sqlInstances[0].context
 az sql instance-failover-group-arc create --shared-name ArcBoxDag --name primarycr --mi $sqlInstances[0].instanceName --role primary --partner-mi $sqlInstances[2].instanceName --resource-group $env:resourceGroup --partner-resource-group $env:resourceGroup
 Write-Host "`n"
 
-$cnameRecord = $sqlInstances[0].instanceName + ".jumpstart.local"
-Add-DnsServerResourceRecordCName -Name "${namingPrefix}Dag" -ComputerName $dcInfo.HostName -HostNameAlias $cnameRecord -ZoneName jumpstart.local -TimeToLive 00:05:00
+$cnameRecord = $sqlInstances[0].instanceName + ".sgmtgdev.com"
+Add-DnsServerResourceRecordCName -Name "${namingPrefix}Dag" -ComputerName $dcInfo.HostName -HostNameAlias $cnameRecord -ZoneName sgmtgdev.com -TimeToLive 00:05:00
 
 
 Write-Header "Creating Azure Data Studio settings for SQL Managed Instance connection with AD Authentication"
 
 $settingsTemplateFile = "$Env:ArcBoxDir\settingsTemplate.json"
 
-$aks = $sqlInstances[1].instanceName + ".jumpstart.local" + ",$sqlmi_port"
-$arcboxDag = "${namingPrefix}Dag.jumpstart.local" + ",$sqlmi_port"
+$aks = $sqlInstances[1].instanceName + ".sgmtgdev.com" + ",$sqlmi_port"
+$arcboxDag = "${namingPrefix}Dag.sgmtgdev.com" + ",$sqlmi_port"
 $sa_username = $env:AZDATA_USERNAME
 $sa_password = $AZDATA_PASSWORD
 

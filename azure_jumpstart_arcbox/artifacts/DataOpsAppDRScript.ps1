@@ -1,7 +1,7 @@
 $Env:ArcBoxLogsDir = "C:\ArcBox\Logs"
 
 $CName = "dataops"
-# $certdns = "$CName.jumpstart.local"
+# $certdns = "$CName.sgmtgdev.com"
 $appNamespace = "arc"
 $sqlInstance = "aks-dr"
 
@@ -68,7 +68,7 @@ Do
    Start-Sleep -Seconds 5
 } while ($null -eq $appIpaddress)
 Add-DnsServerResourceRecord -ComputerName $dcInfo.HostName -ZoneName $dcInfo.Domain -A -Name "$CName-$sqlInstance" -AllowUpdateAny -IPv4Address $appIpaddress -TimeToLive 01:00:00 -AgeRecord
-Add-DnsServerResourceRecordCName -Name $CName -ComputerName $dcInfo.HostName -HostNameAlias "$CName-$sqlInstance.jumpstart.local" -ZoneName jumpstart.local -TimeToLive 00:05:00
+Add-DnsServerResourceRecordCName -Name $CName -ComputerName $dcInfo.HostName -HostNameAlias "$CName-$sqlInstance.sgmtgdev.com" -ZoneName sgmtgdev.com -TimeToLive 00:05:00
 
 
 Do {

@@ -36,7 +36,7 @@ if ($env:flavor -eq 'ITPro') {
 
   # Configure mgmtMonitorWorkbook.parameters.json template with workspace resource id
   $monitorWorkbookParameters = "$ArcBoxDir\mgmtMonitorWorkbook.parameters.json"
-  $workspaceResourceId = $(az resource show --resource-group $Env:resourceGroup --name $Env:workspaceName --resource-type 'Microsoft.OperationalInsights/workspaces' --query id -o tsv)
+  $workspaceResourceId = '/subscriptions/b3f5e237-cf19-4f3e-9850-5d2d4d5bff1f/resourcegroups/logging-rg-prd-eu-01/providers/microsoft.operationalinsights/workspaces/coresentinel-log-prd-eu-01'
 (Get-Content -Path $monitorWorkbookParameters) -replace 'workbookResourceId-stage', $workspaceResourceId | Set-Content -Path $monitorWorkbookParameters
 
   Write-Host 'Deploying Azure Monitor Workbook ARM template.'

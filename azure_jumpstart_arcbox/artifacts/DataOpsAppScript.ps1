@@ -3,7 +3,7 @@ $Env:ArcBoxLogsDir = "C:\ArcBox\Logs"
 $Env:ArcBoxIconDir = "C:\ArcBox\Icons"
 
 $CName = "jumpstartbooks"
-# $certdns = "$CName.jumpstart.local"
+# $certdns = "$CName.sgmtgdev.com"
 # $password = "arcbox"
 $appNamespace = "arc"
 $sqlInstance = "k3s"
@@ -99,7 +99,7 @@ Do
    Start-Sleep -Seconds 5
 } while ($null -eq $appIpaddress)
 Add-DnsServerResourceRecord -ComputerName $dcInfo.HostName -ZoneName $dcInfo.Domain -A -Name "$CName-$sqlInstance" -AllowUpdateAny -IPv4Address $appIpaddress -TimeToLive 01:00:00 -AgeRecord
-Add-DnsServerResourceRecordCName -Name $CName -ComputerName $dcInfo.HostName -HostNameAlias "$CName-$sqlInstance.jumpstart.local" -ZoneName jumpstart.local -TimeToLive 00:05:00
+Add-DnsServerResourceRecordCName -Name $CName -ComputerName $dcInfo.HostName -HostNameAlias "$CName-$sqlInstance.sgmtgdev.com" -ZoneName sgmtgdev.com -TimeToLive 00:05:00
 
 Do {
   Write-Host "Waiting for Web App pod, hold tight..."
@@ -111,7 +111,7 @@ Do {
 $shortcutLocation = "$Env:Public\Desktop\Bookstore.lnk"
 $wScriptShell = New-Object -ComObject WScript.Shell
 $shortcut = $wScriptShell.CreateShortcut($shortcutLocation)
-$shortcut.TargetPath = "http://$CName.jumpstart.local"
+$shortcut.TargetPath = "http://$CName.sgmtgdev.com"
 $shortcut.IconLocation="$Env:ArcBoxIconDir\bookstore.ico, 0"
 $shortcut.WindowStyle = 3
 $shortcut.Save()

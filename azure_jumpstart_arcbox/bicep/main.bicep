@@ -55,7 +55,7 @@ param bastionSku string = 'Basic'
 param githubUser string = 'microsoft'
 
 @description('Active directory domain services domain name')
-param addsDomainName string = 'jumpstart.local'
+param addsDomainName string = 'sgmtgdev.com'
 
 @description('Random GUID for cluster names')
 param guid string = substring(newGuid(),0,4)

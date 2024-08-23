@@ -1,5 +1,5 @@
 @description('The FQDN of the domain')
-param addsDomainName string = 'jumpstart.local'
+param addsDomainName string = 'sgmtgdev.com'
 
 @description('The name of your Virtual Machine')
 param clientVMName string = '${namingPrefix}-ADDS'

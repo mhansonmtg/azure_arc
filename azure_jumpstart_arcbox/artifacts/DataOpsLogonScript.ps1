@@ -179,9 +179,9 @@ kubectx k3s="$namingPrefix-k3s-data"
 Start-Sleep -Seconds 10
 
 # Get Log Analytics workspace details
-$workspaceId = $(az resource show --resource-group $Env:resourceGroup --name $Env:workspaceName --resource-type "Microsoft.OperationalInsights/workspaces" --query properties.customerId -o tsv)
-$workspaceKey = $(az monitor log-analytics workspace get-shared-keys --resource-group $Env:resourceGroup --workspace-name $Env:workspaceName --query primarySharedKey -o tsv)
-$workspaceResourceId = $(az resource show --resource-group $Env:resourceGroup --name $Env:workspaceName --resource-type "Microsoft.OperationalInsights/workspaces" --query id -o tsv)
+$workspaceId = 'b1343933-0c9f-42aa-8f57-45ce07e988e9'
+$workspaceKey = 'l//av57jGW+GZu8/GQgxs2L2rIxtQxqsgKtmWE4X/vNEhk293ct2OY3mUJlpa9OG+ptpeJ0wlHML2fmC2ifPfQ=='
+$workspaceResourceId = '/subscriptions/b3f5e237-cf19-4f3e-9850-5d2d4d5bff1f/resourcegroups/logging-rg-prd-eu-01/providers/microsoft.operationalinsights/workspaces/coresentinel-log-prd-eu-01'
 
 Write-Header "Onboarding clusters as an Azure Arc-enabled Kubernetes cluster"
 foreach ($cluster in $clusters) {
@@ -433,8 +433,8 @@ $clusters | Foreach-Object -ThrottleLimit 5 -Parallel {
             Write-Host "Bootstrapper pod is ready!"
 
             # Get workspace information again as this code is executed in a different process
-            $workspaceId = $(az resource show --resource-group $Env:resourceGroup --name $Env:workspaceName --resource-type "Microsoft.OperationalInsights/workspaces" --query properties.customerId -o tsv)
-            $workspaceKey = $(az monitor log-analytics workspace get-shared-keys --resource-group $Env:resourceGroup --workspace-name $Env:workspaceName --query primarySharedKey -o tsv)
+            $workspaceId = 'b1343933-0c9f-42aa-8f57-45ce07e988e9'
+            $workspaceKey = 'l//av57jGW+GZu8/GQgxs2L2rIxtQxqsgKtmWE4X/vNEhk293ct2OY3mUJlpa9OG+ptpeJ0wlHML2fmC2ifPfQ=='
 
             $connectedClusterId = az connectedk8s show --name $clusterName --resource-group $Env:resourceGroup --query id -o tsv
             $extensionId = az k8s-extension show --name arc-data-services --cluster-type connectedClusters --cluster-name $clusterName --resource-group $Env:resourceGroup --query id -o tsv
@@ -496,8 +496,8 @@ Start-Transcript -Path $Env:ArcBoxLogsDir\DataOpsLogonScript.log -Append
 
 # Enable metrics autoUpload
 Write-Header "Enabling metrics and logs auto-upload"
-$Env:WORKSPACE_ID = $(az resource show --resource-group $Env:resourceGroup --name $Env:workspaceName --resource-type "Microsoft.OperationalInsights/workspaces" --query properties.customerId -o tsv)
-$Env:WORKSPACE_SHARED_KEY = $(az monitor log-analytics workspace get-shared-keys --resource-group $Env:resourceGroup --workspace-name $Env:workspaceName --query primarySharedKey -o tsv)
+$Env:WORKSPACE_ID = '/subscriptions/b3f5e237-cf19-4f3e-9850-5d2d4d5bff1f/resourcegroups/logging-rg-prd-eu-01/providers/microsoft.operationalinsights/workspaces/coresentinel-log-prd-eu-01'
+$Env:WORKSPACE_SHARED_KEY = 'l//av57jGW+GZu8/GQgxs2L2rIxtQxqsgKtmWE4X/vNEhk293ct2OY3mUJlpa9OG+ptpeJ0wlHML2fmC2ifPfQ=='
 
 foreach($cluster in $clusters){
     $clusterName = $cluster.clusterName

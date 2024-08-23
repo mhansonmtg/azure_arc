@@ -2,7 +2,7 @@ $ArcBoxLogsDir = "C:\ArcBox\Logs"
 
 Start-Transcript -Path $ArcBoxLogsDir\DeploymentStatus.log
 
-$Env:AZURE_STORAGE_CONNECTION_STRING ='BlobEndpoint=https://jumpstartusage.blob.core.windows.net/;QueueEndpoint=https://jumpstartusage.queue.core.windows.net/;FileEndpoint=https://jumpstartusage.file.core.windows.net/;TableEndpoint=https://jumpstartusage.table.core.windows.net/;SharedAccessSignature=sv=2020-08-04&ss=q&srt=sco&sp=wa&se=2031-12-02T06:42:34Z&st=2021-10-27T21:42:34Z&spr=https&sig=isIcZalrTQHykaOvDXUYkYac1QmvT9UW9lJOBl%2B5W84%3D'
+$Env:AZURE_STORAGE_CONNECTION_STRING ='BlobEndpoint=https://sgarcktfxuoca4g2qa.blob.core.windows.net/;QueueEndpoint=https://sgarcktfxuoca4g2qa.queue.core.windows.net/;FileEndpoint=https://sgarcktfxuoca4g2qa.file.core.windows.net/;TableEndpoint=https://sgarcktfxuoca4g2qa.table.core.windows.net/;SharedAccessSignature=sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-08-23T22:44:43Z&st=2024-08-23T14:44:43Z&spr=https&sig=Tef3Qo28Ifj%2B6EKEj7bQj0%2FanMGTN0ROrRXN1JY1SOQ%3D'
 
 # Adding Resource Graph Azure CLI extension
 Write-Host "`n"
@@ -21,7 +21,7 @@ if ($Env:flavor -eq "DevOps") {
     if ( $arcNumResources -eq 11 )
     {
         Write-Host "Great success!"
-        az storage message put --content "Successful Jumpstart ArcBox ($Env:flavor) deployment" --account-name "jumpstartusage" --queue-name "arcboxusage" --time-to-live -1
+        az storage message put --content "Successful Jumpstart ArcBox ($Env:flavor) deployment" --account-name "sgarcktfxuoca4g2qa" --queue-name "arcboxusage" --time-to-live -1
     }
 }
 
@@ -30,11 +30,11 @@ if ($Env:flavor -eq "ITPro") {
     if ( $arcNumResources -eq 6 )
     {
         Write-Host "Great success!"
-        az storage message put --content "Successful Jumpstart ArcBox ($Env:flavor) deployment" --account-name "jumpstartusage" --queue-name "arcboxusage" --time-to-live -1
+        az storage message put --content "Successful Jumpstart ArcBox ($Env:flavor) deployment" --account-name "sgarcktfxuoca4g2qa" --queue-name "arcboxusage" --time-to-live -1
     }
 }
 
 if ( $arcNumResources -ne 11 -and $arcNumResources -ne 6) {
     Write-Host "Too bad, not all Azure Arc resources onboarded"
-    az storage message put --content "Failed Jumpstart ArcBox ($Env:flavor) deployment" --account-name "jumpstartusage" --queue-name "arcboxusage" --time-to-live -1
+    az storage message put --content "Failed Jumpstart ArcBox ($Env:flavor) deployment" --account-name "sgarcktfxuoca4g2qa" --queue-name "arcboxusage" --time-to-live -1
 }
