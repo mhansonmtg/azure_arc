@@ -155,7 +155,7 @@ foreach ($module in $modules) {
 }
 
 # Add Key Vault Secrets
-Connect-AzAccount -Identity
+Connect-AzAccount -Identity -SubscriptionId $subscriptionId
 
 $KeyVault = Get-AzKeyVault -ResourceGroupName $resourceGroup
 
