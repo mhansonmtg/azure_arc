@@ -18,7 +18,7 @@ param ubuntuOSVersion string = '22_04-lts-gen2'
 param azureLocation string = resourceGroup().location
 
 @description('The size of the VM')
-param vmSize string = 'Standard_B4ms'
+param vmSize string = 'Standard_B2ms'
 
 @description('Resource Id of the subnet in the virtual network')
 param subnetId string
@@ -49,7 +49,7 @@ param namingPrefix string = 'ArcBox'
 
 var publicIpAddressName = '${vmName}-PIP'
 var networkInterfaceName = '${vmName}-NIC'
-var osDiskType = 'Premium_LRS'
+var osDiskType = 'StandardSSD_LRS'
 var k3sControlPlane = 'true' // deploy single-node k3s control plane
 var diskSize = (flavor == 'DataOps') ? 512 : 64
 var numberOfIPAddresses = (flavor == 'DataOps') ? 8 : 5 // The number of IP addresses to create
