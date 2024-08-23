@@ -108,7 +108,7 @@ param addsDomainName string = 'jumpstart.local'
 param customLocationRPOID string = ''
 
 @description('The SKU of the VMs disk')
-param vmsDiskSku string = 'Premium_LRS'
+param vmsDiskSku string = 'StandardSSD_LRS'
 
 @description('Use this parameter to enable or disable debug mode for the automation scripts on the client VM, effectively configuring PowerShell ErrorActionPreference to Break. Default is false.')
 param debugEnabled bool = false
@@ -121,7 +121,7 @@ param autoShutdownEmailRecipient string = ''
 var bastionName = '${namingPrefix}-Bastion'
 var publicIpAddressName = deployBastion == false ? '${vmName}-PIP' : '${bastionName}-PIP'
 var networkInterfaceName = '${vmName}-NIC'
-var osDiskType = 'Premium_LRS'
+var osDiskType = 'StandardSSD_LRS'
 var PublicIPNoBastion = {
   id: publicIpAddress.id
 }
@@ -168,7 +168,7 @@ resource vmDisk 'Microsoft.Compute/disks@2023-04-02' = {
       createOption: 'Empty'
     }
     diskSizeGB: 1024
-    burstingEnabled: true
+    burstingEnabled: false
   }
 }
 
@@ -180,7 +180,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
   }
   properties: {
     hardwareProfile: {
-      vmSize: flavor == 'DevOps' ? 'Standard_B4ms' : flavor == 'DataOps' ? 'Standard_D4s_v5' : 'Standard_D8s_v5'
+      vmSize: flavor == 'DevOps' ? 'Standard_B4ms' : flavor == 'DataOps' ? 'Standard_E2s_v3' : 'Standard_D8s_v5'
     }
     storageProfile: {
       osDisk: {
