@@ -21,10 +21,10 @@ param osDiskSizeGB int = 0
 @description('The number of nodes for the cluster')
 @minValue(1)
 @maxValue(50)
-param agentCount int = 3
+param agentCount int = 1
 
 @description('The size of the Virtual Machine')
-param agentVMSize string = 'Standard_D8s_v4'
+param agentVMSize string = 'Standard_E4s_v3'
 
 @description('User name for the Linux Virtual Machines')
 param linuxAdminUsername string = 'arcdemo'
