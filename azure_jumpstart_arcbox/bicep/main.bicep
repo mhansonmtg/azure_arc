@@ -189,7 +189,7 @@ module clientVmDeployment 'clientVm/clientVm.bicep' = {
     autoShutdownEmailRecipient: autoShutdownEmailRecipient
   }
   dependsOn: [
-    updateVNetDNSServers
+    //updateVNetDNSServers
     ubuntuRancherK3sDataSvcDeployment
     ubuntuRancherK3sDeployment
   ]
@@ -216,7 +216,7 @@ module mgmtArtifactsAndPolicyDeployment 'mgmt/mgmtArtifacts.bicep' = {
   }
 }
 
-module addsVmDeployment 'mgmt/addsVm.bicep' = if (flavor == 'DataOps'){
+/* module addsVmDeployment 'mgmt/addsVm.bicep' = if (flavor == 'DataOps'){
   name: 'addsVmDeployment'
   params: {
     windowsAdminUsername : windowsAdminUsername
@@ -230,9 +230,9 @@ module addsVmDeployment 'mgmt/addsVm.bicep' = if (flavor == 'DataOps'){
   dependsOn:[
     mgmtArtifactsAndPolicyDeployment
   ]
-}
+} */
 
-module updateVNetDNSServers 'mgmt/mgmtArtifacts.bicep' = if (flavor == 'DataOps'){
+/* module updateVNetDNSServers 'mgmt/mgmtArtifacts.bicep' = if (flavor == 'DataOps'){
   name: 'updateVNetDNSServers'
   params: {
     workspaceName: logAnalyticsWorkspaceName
@@ -249,7 +249,7 @@ module updateVNetDNSServers 'mgmt/mgmtArtifacts.bicep' = if (flavor == 'DataOps'
     addsVmDeployment
     mgmtArtifactsAndPolicyDeployment
   ]
-}
+} */
 
 module aksDeployment 'kubernetes/aks.bicep' = if (flavor == 'DataOps') {
   name: 'aksDeployment'
@@ -261,7 +261,7 @@ module aksDeployment 'kubernetes/aks.bicep' = if (flavor == 'DataOps') {
     namingPrefix: namingPrefix
   }
   dependsOn: [
-    updateVNetDNSServers
+    //updateVNetDNSServers
     stagingStorageAccountDeployment
     mgmtArtifactsAndPolicyDeployment
   ]
